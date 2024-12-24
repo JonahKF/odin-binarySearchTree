@@ -61,16 +61,23 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node.right !== null) {
     prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
   }
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
   if (node.left !== null) {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
 
-const generateRandomArray = () => {};
+const generateRandomArray = (size) => {
+  let arr = [];
+  for (let n = 1; n <= size; n++) {
+    let num = Math.floor(Math.random() * 100);
+    arr.push(num);
+  }
+  return arr;
+};
 
 const driver = () => {
-  const arr = generateRandomArray();
+  const arr = generateRandomArray(12);
   const testTree = new Tree(arr);
   prettyPrint(testTree.root);
 
