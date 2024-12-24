@@ -31,9 +31,50 @@ class Tree {
     return root;
   }
 
-  insert() {}
+  insert(value) {
+    const recursiveInsert = (root, value) => {
+      if (root === null) return new Node(value);
+      if (root.value === value) return root;
 
-  deleteItem() {}
+      if (value < root.value) {
+        root.left = recursiveInsert(root.left, value);
+      } else if (value > root.value) {
+        root.right = recursiveInsert(root.right, value);
+      }
+
+      return root;
+    };
+
+    this.root = recursiveInsert(this.root, value);
+  }
+
+  deleteItem(value) {
+    const getSuccessor = (currentNode) => {
+      currentNode = currentNode.right;
+      while (currentNode !== null && currentNode.left !== null) {
+        currentNode = currentNode.left;
+      }
+      return currentNode;
+    };
+
+    const recursiveDelete = (root, value) => {
+      if (root === null) return root;
+      if (root.value > value) {
+        root.left = recursiveDelete(root.left, value);
+      } else if (root.value < value) {
+        root.right = recursiveDelete(root.right, value);
+      } else {
+        if (root.left === null) return root.right;
+        if (root.right === null) return root.left;
+        let successor = getSuccessor(root);
+        root.value = successor.value;
+        root.right = recursiveDelete(root.right, successor.value);
+      }
+      return root;
+    };
+
+    this.root = recursiveDelete(this.root, value);
+  }
 
   find() {}
 
@@ -77,7 +118,8 @@ const generateRandomArray = (size) => {
 };
 
 const driver = () => {
-  const arr = generateRandomArray(12);
+  const randArrSize = 12;
+  const arr = generateRandomArray(randArrSize);
   const testTree = new Tree(arr);
   prettyPrint(testTree.root);
 
