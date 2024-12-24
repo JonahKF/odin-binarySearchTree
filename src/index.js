@@ -64,6 +64,7 @@ class Tree {
       } else if (root.value < value) {
         root.right = recursiveDelete(root.right, value);
       } else {
+        // If value matches
         if (root.left === null) return root.right;
         if (root.right === null) return root.left;
         let successor = getSuccessor(root);
@@ -76,7 +77,18 @@ class Tree {
     this.root = recursiveDelete(this.root, value);
   }
 
-  find() {}
+  find(value) {
+    const recursiveFind = (root, value) => {
+      if (root === null || root.value === value) return root;
+      if (value < root.value) {
+        return recursiveFind(root.left, value);
+      } else {
+        return recursiveFind(root.right, value);
+      }
+    };
+
+    return recursiveFind(this.root, value);
+  }
 
   levelOrder(callback) {}
 
