@@ -152,13 +152,56 @@ class Tree {
     recursivePostOrder(this.root, callback);
   }
 
-  height(node) {}
+  height(node) {
+    if (node === null) return -1;
 
-  depth(node) {}
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
 
-  isBalanced() {}
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
 
-  rebalance() {}
+  depth(node) {
+    const recursiveDepth = (root, node, currentDepth = 0) => {
+      if (root === null) return -1;
+      if (root === node) return currentDepth;
+      if (node.value < root.value) {
+        return recursiveDepth(root.left, node, currentDepth + 1);
+      } else {
+        return recursiveDepth(root.right, node, currentDepth + 1);
+      }
+    };
+
+    return recursiveDepth(this.root, node);
+  }
+
+  isBalanced() {
+    // A balanced tree is one where the difference between heights of the
+    // left subtree and the right subtree of every node is not more than 1.
+    const checkBalance = (node) => {
+      if (node === null) return true;
+
+      let heightDiff = Math.abs(
+        this.height(node.left) - this.height(node.right),
+      );
+
+      return heightDiff <= 1 &&
+        checkBalance(node.left) &&
+        checkBalance(node.right)
+        ? true
+        : false;
+    };
+
+    return checkBalance(this.root);
+  }
+
+  rebalance() {
+    let values = [];
+    this.inOrder((node) => values.push(node.value));
+
+    this.arr = this.sortArray(values);
+    this.root = this.buildTree(this.arr);
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -190,23 +233,44 @@ const driver = () => {
   prettyPrint(testTree.root);
 
   // Call isBalanced()
+  console.log("Is balanced?", testTree.isBalanced());
 
   // Print out all elements in level, pre, post, and in order.
-
-  // console.log("Level Order Elements:");
-  // testTree.levelOrder((node) => console.log(node.value));
-  // console.log("Pre Order Elements:");
-  // testTree.preOrder((node) => console.log(node.value));
-  // console.log("Post Order Elements:");
-  // testTree.postOrder((node) => console.log(node.value));
+  console.log("Level Order Elements:");
+  testTree.levelOrder((node) => console.log(node.value));
+  console.log("Pre Order Elements:");
+  testTree.preOrder((node) => console.log(node.value));
+  console.log("Post Order Elements:");
+  testTree.postOrder((node) => console.log(node.value));
   console.log("In Order Elements:");
   testTree.inOrder((node) => console.log(node.value));
 
   // Unbalance the tree by adding several numbers > 100.
+  testTree.insert(100);
+  testTree.insert(101);
+  testTree.insert(102);
+  testTree.insert(103);
+
   // Confirm that the tree is unbalanced by calling isBalanced.
+  prettyPrint(testTree.root);
+  console.log("Is balanced?", testTree.isBalanced());
+
   // Balance the tree by calling rebalance.
+  testTree.rebalance();
+
   // Confirm that the tree is balanced by calling isBalanced.
+  prettyPrint(testTree.root);
+  console.log("Is balanced?", testTree.isBalanced());
+
   // Print out all elements in level, pre, post, and in order.
+  console.log("Level Order Elements:");
+  testTree.levelOrder((node) => console.log(node.value));
+  console.log("Pre Order Elements:");
+  testTree.preOrder((node) => console.log(node.value));
+  console.log("Post Order Elements:");
+  testTree.postOrder((node) => console.log(node.value));
+  console.log("In Order Elements:");
+  testTree.inOrder((node) => console.log(node.value));
 };
 
 driver();
