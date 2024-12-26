@@ -90,13 +90,49 @@ class Tree {
     return recursiveFind(this.root, value);
   }
 
-  levelOrder(callback) {}
+  levelOrder(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("A callback function is required");
+    }
+    let queue = [];
+    if (this.root === null) return;
 
-  inOrder(callback) {}
+    queue.push(this.root);
+    while (queue.length != 0) {
+      let currentNode = queue.shift();
+      callback(currentNode);
 
-  preOrder(callback) {}
+      if (currentNode.left != null) queue.push(currentNode.left);
+      if (currentNode.right != null) queue.push(currentNode.right);
+    }
+  }
 
-  postOrder(callback) {}
+  inOrder(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("A callback function is required");
+    }
+  }
+
+  preOrder(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("A callback function is required");
+    }
+
+    const recursivePreOrder = (root, callback) => {
+      if (root === null) return;
+      callback(root);
+      recursivePreOrder(root.left, callback);
+      recursivePreOrder(root.right, callback);
+    };
+
+    recursivePreOrder(this.root, callback);
+  }
+
+  postOrder(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("A callback function is required");
+    }
+  }
 
   height(node) {}
 
@@ -137,6 +173,11 @@ const driver = () => {
 
   // Call isBalanced()
   // Print out all elements in level, pre, post, and in order.
+  // console.log("Level Order Elements:");
+  // testTree.levelOrder((node) => console.log(node.value));
+  console.log("Pre Order Elements:");
+  testTree.preOrder((node) => console.log(node.value));
+
   // Unbalance the tree by adding several numbers > 100.
   // Confirm that the tree is unbalanced by calling isBalanced.
   // Balance the tree by calling rebalance.
