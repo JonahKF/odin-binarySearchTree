@@ -132,6 +132,15 @@ class Tree {
     if (typeof callback !== "function") {
       throw new Error("A callback function is required");
     }
+
+    const recursivePostOrder = (root, callback) => {
+      if (root === null) return;
+      recursivePostOrder(root.left, callback);
+      recursivePostOrder(root.right, callback);
+      callback(root);
+    };
+
+    recursivePostOrder(this.root, callback);
   }
 
   height(node) {}
@@ -175,8 +184,10 @@ const driver = () => {
   // Print out all elements in level, pre, post, and in order.
   // console.log("Level Order Elements:");
   // testTree.levelOrder((node) => console.log(node.value));
-  console.log("Pre Order Elements:");
-  testTree.preOrder((node) => console.log(node.value));
+  // console.log("Pre Order Elements:");
+  // testTree.preOrder((node) => console.log(node.value));
+  console.log("Post Order Elements:");
+  testTree.postOrder((node) => console.log(node.value));
 
   // Unbalance the tree by adding several numbers > 100.
   // Confirm that the tree is unbalanced by calling isBalanced.
